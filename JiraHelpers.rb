@@ -3,7 +3,25 @@ module JiraHelpers
 
 	PROJECT_ID = 10094
 	CUSTOMER_FIELD = 'cf[10139]'	# Field that tracks customer names(s)
-
+	
+	def get_username() 
+		username = ENV['JIRA_USERNAME']
+		if username.nil? 
+			puts "Missing JIRA_USERNAME environment variable (export JIRA_USERNAME=blah@blah.com)"
+			exit(1)
+		end
+		username
+	end
+	
+	def get_api_key() 
+		api_key = ENV['JIRA_API_KEY']
+		if api_key.nil? 
+			puts "Missing JIRA_API_KEY environment variable (export JIRA_API_KEY=abcdefg)"
+			exit(1)
+		end
+		api_key
+	end
+	
 	def get_base_stats(filter, issue_info)
 		resolutions = Hash[issue_info.group_by{|i| i[:resolution]}.map{|k,v| [k,v.size]}]
 		resolutions.default = 0

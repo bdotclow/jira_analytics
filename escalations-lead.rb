@@ -7,10 +7,6 @@ require 'time_difference'
 require_relative 'JiraConnection'
 require_relative 'JiraHelpers'
 
-#Provide username/jira key:
-#"export JIRA_USERNAME=zzzz"
-#"export JIRA_API_KEY=zzzz"
-
 def get_ship_info(bugs) 
 
 	fixed = bugs.select{ |b| !b[:resolved_date].nil?}
@@ -42,7 +38,7 @@ def get_bug_lead_time(connection)
 	#end
 end
 
-connection = JiraConnection.new(ENV['JIRA_USERNAME'], ENV['JIRA_API_KEY'])
+connection = JiraConnection.new(JiraHelpers.get_username(), JiraHelpers.get_api_key())
 	
 data = get_bug_lead_time(connection)
 	

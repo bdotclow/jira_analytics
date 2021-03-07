@@ -7,10 +7,6 @@ require 'time_difference'
 require_relative 'JiraConnection'
 require_relative 'JiraHelpers'
 
-#Provide username/jira key:
-#"export JIRA_USERNAME=zzzz"
-#"export JIRA_API_KEY=zzzz"
-
 def get_stats_open(connection)
 	filter = "Commander Bugs - Opened in Last Week"
 	issue_info = connection.get_all_filter_issue_info(filter)
@@ -18,7 +14,7 @@ def get_stats_open(connection)
 	JiraHelpers.get_base_stats(filter, issue_info)
 end
 
-connection = JiraConnection.new(ENV['JIRA_USERNAME'], ENV['JIRA_API_KEY'])
+connection = JiraConnection.new(JiraHelpers.get_username(), JiraHelpers.get_api_key())
 	
 data = get_stats_open(connection)
 	

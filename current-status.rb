@@ -7,10 +7,6 @@ require 'time_difference'
 require_relative 'JiraConnection'
 require_relative 'JiraHelpers'
 
-#Provide username/jira key:
-#"export JIRA_USERNAME=zzzz"
-#"export JIRA_API_KEY=zzzz"
-
 def get_current_status(connection)
 	escalations = connection.get_all_issue_info("project=#{JiraHelpers::PROJECT_ID} AND issuetype=Escalation AND resolution=Unresolved")
 	created = connection.get_all_issue_info("project=#{JiraHelpers::PROJECT_ID} AND issuetype=Escalation AND created >= -1w")
@@ -49,7 +45,7 @@ def get_current_status(connection)
 	}
 end
 
-connection = JiraConnection.new(ENV['JIRA_USERNAME'], ENV['JIRA_API_KEY'])
+connection = JiraConnection.new(JiraHelpers.get_username(), JiraHelpers.get_api_key())
 	
 data = get_current_status(connection)
 	

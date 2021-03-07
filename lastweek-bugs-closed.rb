@@ -7,10 +7,6 @@ require 'time_difference'
 require_relative 'JiraConnection'
 require_relative 'JiraHelpers'
 
-#Provide username/jira key:
-#"export JIRA_USERNAME=zzzz"
-#"export JIRA_API_KEY=zzzz"
-
 def get_resolution_stats(issue_info) 
 	fixed = issue_info.select{ |i| "Fixed".eql?(i[:resolution])}.size
 	
@@ -68,7 +64,7 @@ def get_stats_closed(connection)
 	base.merge( get_resolution_stats(issue_info) )
 end
 
-connection = JiraConnection.new(ENV['JIRA_USERNAME'], ENV['JIRA_API_KEY'])
+connection = JiraConnection.new(JiraHelpers.get_username(), JiraHelpers.get_api_key())
 	
 data = get_stats_closed(connection)
 	
