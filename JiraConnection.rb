@@ -53,6 +53,12 @@ class JiraConnection
 			unless resolved.nil?
 				resolve_time = TimeDifference.between(created, resolved).in_days	
 			end
+			
+			start = issue.dig('fields', 'customfield_10014')
+			unless start.nil?
+				cycle_time = TimeDifference.between(start, resolved).in_days
+			end
+			
 			{ 
 				key: issue['key'],
 				created: created,
@@ -66,6 +72,7 @@ class JiraConnection
 				resolution: issue.dig('fields', 'resolution', 'name'),
 				resolved_date: resolved,
 				resolve_time_days: resolve_time,
+				cycle_time_days: cycle_time,
 		
 					# Version it was (or will be) fixed in
 				fix_version: fix_version,
@@ -107,7 +114,7 @@ class JiraConnection
 
 	def get_issues(jql, start) 
 			# limiting the fields makes it much quicker
-		fields = 'fixVersions, created, resolutiondate, priority, key, customfield_10139, status, resolution, customfield_10114, customfield_10122, customfield_10117, customfield_10013, customfield_10113'
+		fields = 'fixVersions, created, resolutiondate, priority, key, customfield_10139, status, resolution, customfield_10114, customfield_10122, customfield_10117, customfield_10013, customfield_10113, customfield_10014'
 		parameters = {'jql' => jql, 'startAt' => start, 'fields' => fields, 'maxResults' => PAGE_SIZE}#, 'fields' => '*all'}
 		response = HTTParty.get('https://snowsoftware.atlassian.net/rest/api/3/search', :query => parameters, :basic_auth => @auth)
 		response.parsed_response
