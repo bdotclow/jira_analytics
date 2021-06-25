@@ -28,7 +28,7 @@ end
 
 def get_bug_lead_time(connection) 
 
-	escalations = connection.get_all_issue_info("project=#{JiraHelpers::PROJECT_ID} AND issueType=Escalation and created < -30d and created > -120d")
+	escalations = connection.get_all_issue_info("project=#{JiraHelpers::PROJECT_ID} AND issueType=Escalation and created < 0d and created > -90d")
 
 	get_ship_info(escalations)
 	
