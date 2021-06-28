@@ -55,7 +55,7 @@ class JiraConnection
 			end
 			
 			start = issue.dig('fields', 'customfield_10014')
-			unless start.nil?
+			unless (start.nil? || resolved.nil?)
 				cycle_time = TimeDifference.between(start, resolved).in_days
 			end
 			
