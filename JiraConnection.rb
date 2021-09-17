@@ -13,6 +13,7 @@ class JiraConnection
 
 		# Get all issues for the specified JQL
 	def get_all_issue_info(jql) 
+	ap jql
 		issues = get_all_issues(jql)
 
 		get_issue_info(issues)
@@ -33,7 +34,7 @@ class JiraConnection
 			elsif fixVersions.size==1
 				fix = fixVersions[0]
 			else
-				fix = fixVersions.min_by {|fv| fv['releaseDate']}	
+				fix = fixVersions.filter{|fv| !fv['releaseDate]'].nil?}.min_by {|fv| fv['releaseDate']}	
 			end
 	
 			lead_time_days = nil
