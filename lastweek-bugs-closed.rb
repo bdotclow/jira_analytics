@@ -8,15 +8,16 @@ require_relative 'JiraConnection'
 require_relative 'JiraHelpers'
 
 def get_resolution_stats(issue_info) 
-	fixed = issue_info.select{ |i| "Fixed".eql?(i[:resolution])}.size
+	fixed_issues = issue_info.select{ |i| "Fixed".eql?(i[:resolution])}
+	fixed = fixed_issues.size
 	
-	change_in = Hash[issue_info.group_by{|i| i[:change_in]}.map{|k,v| [k,v.size]}]
+	change_in = Hash[fixed_issues.group_by{|i| i[:change_in]}.map{|k,v| [k,v.size]}]
 	change_in.default = 0
 	
-	root_cause_counts = Hash[issue_info.group_by{|i| i[:root_cause]}.map{|k,v| [k,v.size]}]
+	root_cause_counts = Hash[fixed_issues.group_by{|i| i[:root_cause]}.map{|k,v| [k,v.size]}]
 	root_cause_counts.default = 0
 
-	released_counts = Hash[issue_info.group_by{|i| i[:released]}.map{|k,v| [k,v.size]}]
+	released_counts = Hash[fixed_issues.group_by{|i| i[:released]}.map{|k,v| [k,v.size]}]
 	released_counts.default = 0		
 
 	changes_involving_ui = change_in["UI Only"] + change_in["UI and Back End"]
@@ -24,6 +25,7 @@ def get_resolution_stats(issue_info)
 	
 	dev_broke = root_cause_counts["Introduced by story development"] + root_cause_counts["Introduced by bug fix"]
 	never_worked = root_cause_counts["Never Worked"]
+
 	
 	released = released_counts["Yes (customer might be using it)"]
 	unreleased = released_counts["No (no customer could be using it)"]
